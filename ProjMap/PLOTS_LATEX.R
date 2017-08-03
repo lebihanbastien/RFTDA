@@ -25,8 +25,7 @@ filename = paste0(filepre, "_s1_s3_pEM")
 #-------------------------------------------------------------------------------
 #Plot
 #-------------------------------------------------------------------------------
-ppEM = plotdf_tile_1(proj_map_tem, "s1_CMU_EM", "s3_CMU_EM", 
-                     s1_exp, s3_exp, "pmin_dist_SEM", "pmin_dist_SEM", FALSE)
+ppEM = plotdf_tile_1(proj_map_tem, "s1_CMU_EM", "s3_CMU_EM", s1_exp, s3_exp, "pmin_dist_SEM", "pmin_dist_SEM", FALSE)
 
 #-------------------------------------------------------------------------------
 # Aes
@@ -99,8 +98,6 @@ ppEM = ppEM + issfd_theme
 ggsave(ppEM, width = xSize, height = ySize,  file = paste0(filename, ".png")) #Save png
 
 
-stop()
-
 #-------------------------------------------------------------------------------
 # Save, classic
 #-------------------------------------------------------------------------------
@@ -165,7 +162,6 @@ pp_x0y0_pEM = plotdf_point(proj_map_tem, "x0_CMU_NCEM", "y0_CMU_NCEM", "x", "y",
 #-------------------------------------------------------------------------------
 #Title & theme
 #-------------------------------------------------------------------------------
-#pp_x0y0_pEM = pp_x0y0_pEM + ggtitle_t0
 pp_x0y0_pEM = pp_x0y0_pEM + scg_pem_guide_false 
 pp_x0y0_pEM = pp_x0y0_pEM + custom_theme
 
@@ -198,22 +194,22 @@ pp_x0y0_pEM = pp_x0y0_pEM + geom_point(data = dfemli, aes(x= x_NC, y = y_NC), si
 #-------------------------------------------------------------------------------
 #Adding some specific points (for ISSFD)
 #-------------------------------------------------------------------------------
-# x0 = c(-0.0503021637013195,  0.0570779010089832, -0.0598335194863945, -0.112560549310534, -0.0663892631216)#, -0.0654641553422555)
-# y0 = c(0.173076575031959, -0.0204216068823488, -0.246786030643921, -0.550123064539671, -0.242757702271792)#, -0.240252085712626)
-# some_points = data.frame(x0 = x0, y0 = y0);
-# pp_x0y0_pEM = pp_x0y0_pEM + geom_point(data = some_points, aes(x0, y0), color = "white", size = 6)
-# # In black
-# pp_x0y0_pEM = pp_x0y0_pEM + geom_point(data = some_points, aes(x0, y0), color = "black", size = 4)
-# # or specific colors
-# for(i in seq(1, NFAM, 1))
-# {
-#   pp_x0y0_pEM = pp_x0y0_pEM + geom_point(data = some_points[i,], aes(x0, y0), color = values[i], size = 4)
-# }
+x0 = c(-0.0503021637013195,  0.0570779010089832, -0.0598335194863945, -0.112560549310534, -0.0663892631216)#, -0.0654641553422555)
+y0 = c(0.173076575031959, -0.0204216068823488, -0.246786030643921, -0.550123064539671, -0.242757702271792)#, -0.240252085712626)
+some_points = data.frame(x0 = x0, y0 = y0);
+pp_x0y0_pEM = pp_x0y0_pEM + geom_point(data = some_points, aes(x0, y0), color = "white", size = 6)
+# In black
+pp_x0y0_pEM = pp_x0y0_pEM + geom_point(data = some_points, aes(x0, y0), color = "black", size = 4)
+# or specific colors
+for(i in seq(1, NFAM, 1))
+{
+  pp_x0y0_pEM = pp_x0y0_pEM + geom_point(data = some_points[i,], aes(x0, y0), color = values[i], size = 4)
+}
 
 #-------------------------------------------------------------------------------
-#Display
+#Ratio
 #-------------------------------------------------------------------------------
-#pp_x0y0_pEM
+#pp_x0y0_pEM = pp_x0y0_pEM + coord_fixed(ratio=1)
 
 #-------------------------------------------------------------------------------
 # Labels
@@ -228,7 +224,7 @@ pp_x0y0_pEM = pp_x0y0_pEM  + issfd_theme
 pp_x0y0_pEM = pp_x0y0_pEM + scg_pem #+ theme(legend.position="top")
 ggsave(pp_x0y0_pEM, width = xSize, height = ySize,  file = paste0(filename, ".png")) 
 
-
+stop()
 #-------------------------------------------------------------------------------
 #Save, classic
 #-------------------------------------------------------------------------------
@@ -313,7 +309,7 @@ pp_path_sol = pp_path_sol + geom_point(data = dfearth_seml, aes(x= x_NC, y = y_N
 
 #Theme
 pp_path_sol = pp_path_sol + custom_bw_theme
-pp_path_sol = pp_path_sol+ coord_fixed(ratio=1)
+pp_path_sol = pp_path_sol + coord_fixed(ratio=1)
 
 #Save in Latex, with annotations
 pp_path_sol = pp_path_sol + labs(x = "$x$", y = "$y$")

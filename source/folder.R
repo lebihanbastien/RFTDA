@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------#
 # Folders
 #--------------------------------------------------------------------------#
-ooftdafolder = "~/BackUpBox/PhD/OOFTDA/"
+ooftdafolder    = "~/BackUpBox/PhD/OOFTDA/"
 ftincppdafolder = "~/BackUpBox/PhD/FourierTaylorInCpp/"
 
 folder = list(

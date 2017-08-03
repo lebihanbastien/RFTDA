@@ -25,11 +25,14 @@ library(tikzDevice)
 library(latex2exp)
 library(RColorBrewer)
 library(Rgnuplot)
-library(plot3D)
+#library(plot3D)
+library(rgl)
+library(gtable)
 
 #-------------------------------------------------------------------------------
 # Load Source files
 #-------------------------------------------------------------------------------
+source("source/rgl_init.R")
 source("source/folder.R")
 source("source/plot.R")
 source("source/env.R")
@@ -44,3 +47,4 @@ source("source/ggplot2tikz.R")
 source("source/rbind_cc.R")
 source("source/get_cont.R")
 source("source/fpp_path_traj.R")
+source("source/fpp_path_traj_phd.R")

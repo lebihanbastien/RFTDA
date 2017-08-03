@@ -1,5 +1,5 @@
 ################################################################################
-# R script to handle a projection map (connections between EML2 and SEML1,2)
+# R script to handle a projection map (connections from EML2 to SEML1,2)
 # continuation case
 #
 # WARNING: MAIN.R must be loaded once before.
@@ -29,22 +29,23 @@
 #===============================================================================
 # Which specific time?
 #===============================================================================
-ratio_desired =  0.99# 0.065; # x SEML.us_em.T
+ratio_desired =  0.995# 0.065; # x SEML.us_em.T
 time_desired  =  ratio_desired*CST_SEM_PERIOD_EM;
+ISSAVED       = FALSE
 
 #===============================================================================
 #Family
 #===============================================================================
-isFAM  = TRUE  #if FALSE, no family is used
-FAM0   = 1 #41 is cont
-PRINT  = TRUE
+isFAM  = FALSE  #if FALSE, no family is used
+FAM0   = 101 #41 is cont
+PRINT  = FALSE
 FAMILY = switch(isFAM, "TRUE" = paste0("_fam", FAM0), "FALSE" = "")
 
 #-------------------------------------------------------------------------------
 # For 3D type, we can select some values of s2/s4
 #-------------------------------------------------------------------------------
-s2_value = 0;
-s4_value = 0;
+s2_value = 8;
+s4_value = -12;
 
 # Family for 3d computation
 if(TYPE == "_3d")
@@ -55,7 +56,6 @@ if(TYPE == "_3d")
     FAMILY = paste0(FAMILY, "_fam", FAM0)
   }
 }
-
 
 #===============================================================================
 # Multiple Families
@@ -252,46 +252,11 @@ if(nrow(traj_cont) > 0 && nrow(proj_cont) >0)
 #===============================================================================
 # Get results from JPL file
 #===============================================================================
-get_traj_cont_jpl <- function(FILE_PREFIX_CONT_JPL, FILE_SUFFIX_CONT_JPL, FAMILY="")
-{
-  #-----------------------------------------------------------------------------
-  # Column names
-  #-----------------------------------------------------------------------------
-  names = c(  "label",  "coord", "t_eph", 
-              "t_SEM", 
-              "x_NCSEM", "y_NCSEM", "z_NCSEM", 
-              "px_NCSEM", "py_NCSEM", "pz_NCSEM",
-              "t_EM",
-              "x_NCEM", "y_NCEM", "z_NCEM", 
-              "px_NCEM", "py_NCEM", "pz_NCEM")
-  
-  #-----------------------------------------------------------------------------
-  # Build the filename 
-  #-----------------------------------------------------------------------------
-  filepre_cont_traj  = paste0(FILE_PREFIX_CONT_JPL, FILE_SUFFIX_CONT_JPL, FAMILY);
-  filename_cont_traj = paste0(filepre_cont_traj, ".bin");
-  
-  #-----------------------------------------------------------------------------
-  # Read data
-  #-----------------------------------------------------------------------------
-  if (file.exists(filename_cont_traj))
-  {
-    #Read table
-    traj_cont = dffbinary(filename_cont_traj, 17, names)
-    
-  }
-  
-  return(traj_cont)
-}
-
-#-------------------------------------------------------------------------------
-# Continuation trajectories, jpl refinement
-#-------------------------------------------------------------------------------
-traj_cont_jpl = get_traj_cont_jpl(FILE_PREFIX_CONT_JPL, FILE_SUFFIX_CONT_JPL, FAMILY="")
+traj_cont_jpl = get_traj_comp(FILE_PREFIX_CONT_JPL, FILE_SUFFIX_CONT_JPL, FAMILY="")
 
 #===============================================================================
 # Plots (requires to load the POSTPROCESS.R script before)
 #===============================================================================
 source("ProjMap/POSTPROCESS.R")
-source("ProjMap/PLOTS.R")
+#source("ProjMap/PLOTS.R")
 

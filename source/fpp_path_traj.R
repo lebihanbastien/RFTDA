@@ -6,10 +6,11 @@
 #-------------------------------------------------------------------------------
 fpp_path_traj <- function(df, filename, fwrk, limits.x = c(NaN, NaN), limits.y = c(NaN, NaN),
                           xlab = "x", ylab = "y", xlab.tex = "$x$", ylab.tex = "$y$",
-                          size.traj = 1.2, size.txt = 7, size.lib = 2, size.prim = 3,
-                          y.position.labels = -0.08,
+                          size.traj = 0.8, size.txt = 7, size.lib = 2, size.prim = 3,
+                          y.position.labels = -0.09,
                           colour.traj = NaN, complementary.objects = FALSE,
-                          lib.point.em = "L2", lib.point.sem = "L2")
+                          lib.point.em = "L2", lib.point.sem = "L2", isLaTeX = TRUE,
+                          isPNG = TRUE, isPDF = TRUE, isPrimary = TRUE)
 {
   #-----------------------------------------------------------------------------
   # Local coordinates
@@ -68,7 +69,11 @@ fpp_path_traj <- function(df, filename, fwrk, limits.x = c(NaN, NaN), limits.y =
     }
     
     #Add Earth
-    fplot = fplot + geom_point(data = dfearth_seml, aes(x= x_NC, y = y_NC), size = size.prim) 
+    if(isPrimary)
+    {
+      fplot = fplot + geom_point(data = dfearth_seml, aes(x= x_NC, y = y_NC), size = size.prim) 
+    }
+    
     
     #---------------------------------------------------------------------------
     # Limits
@@ -111,11 +116,14 @@ fpp_path_traj <- function(df, filename, fwrk, limits.x = c(NaN, NaN), limits.y =
                                  size = 5, parse = TRUE)
     fplot.pdf = fplot.pdf + annotate("text", x = 0, y = y.position.labels,  label = paste0("SEML[", num.sem, "]"), size = 5, parse = TRUE)
     # Earth
-    fplot.pdf = fplot.pdf + annotate("text", x = earth.x, y = y.position.labels, 
-                                     label = "bold(Earth)",  colour = "white",
-                                     size = 5, parse = TRUE)
-    
-    fplot.pdf = fplot.pdf + annotate("text", x = earth.x, y = y.position.labels, label = "Earth", size = 5)
+    if(isPrimary)
+    {
+      fplot.pdf = fplot.pdf + annotate("text", x = earth.x, y = y.position.labels, 
+                                       label = "bold(Earth)",  colour = "white",
+                                       size = 5, parse = TRUE)
+      
+      fplot.pdf = fplot.pdf + annotate("text", x = earth.x, y = y.position.labels, label = "Earth", size = 5)
+    }
     
     #---------------------------------------------------------------------------
     # Annotations & labels in tex form
@@ -127,9 +135,11 @@ fpp_path_traj <- function(df, filename, fwrk, limits.x = c(NaN, NaN), limits.y =
       fplot.tex = fplot.tex + annotate("text", x = -1.993, y = y.position.labels,  label = "\\textsc{seml}$_1$", size = size.txt)
     }
     # Earth
-    fplot.tex = fplot.tex + annotate("text", x = earth.x, y = y.position.labels, label = "Earth", colour = "white", size = size.txt+0.1)
-    fplot.tex = fplot.tex + annotate("text", x = earth.x, y = y.position.labels, label = "Earth", size = size.txt)
-    
+    if(isPrimary)
+    {
+      fplot.tex = fplot.tex + annotate("text", x = earth.x, y = y.position.labels, label = "Earth", colour = "white", size = size.txt+0.1)
+      fplot.tex = fplot.tex + annotate("text", x = earth.x, y = y.position.labels, label = "Earth", size = size.txt)
+    }
   }
   else if(fwrk == "EM")
   {
@@ -161,8 +171,10 @@ fpp_path_traj <- function(df, filename, fwrk, limits.x = c(NaN, NaN), limits.y =
     fplot = fplot + geom_point(data = dfemli, aes(x= x_NC, y = y_NC), size = size.lib) 
     
     #Add Moon
-    fplot = fplot + geom_point(data = dfmoon_eml, aes(x= x_NC, y = y_NC), size = size.prim)
-    
+    if(isPrimary)
+    {
+      fplot = fplot + geom_point(data = dfmoon_eml, aes(x= x_NC, y = y_NC), size = size.prim)
+    }
     
     #---------------------------------------------------------------------------
     # Zoom
@@ -207,10 +219,13 @@ fpp_path_traj <- function(df, filename, fwrk, limits.x = c(NaN, NaN), limits.y =
     fplot.pdf = fplot.pdf + annotate("text", x = 0, y = -0.08,  label = paste0("EML[", num.em, "]"), size = 5, parse = TRUE)
     
     # Moon
-    fplot.pdf = fplot.pdf + annotate("text", x = moon.x, y = -0.08, 
-                                     label = "bold(Moon)",  colour = "white",
-                                     size = 5, parse = TRUE)
-    fplot.pdf = fplot.pdf + annotate("text", x = moon.x, y = -0.08, label = "Moon", size = 5)
+    if(isPrimary)
+    {
+      fplot.pdf = fplot.pdf + annotate("text", x = moon.x, y = -0.08, 
+                                       label = "bold(Moon)",  colour = "white",
+                                       size = 5, parse = TRUE)
+      fplot.pdf = fplot.pdf + annotate("text", x = moon.x, y = -0.08, label = "Moon", size = 5)
+    }
     
     #---------------------------------------------------------------------------
     # Annotations & labels in tex form
@@ -226,7 +241,10 @@ fpp_path_traj <- function(df, filename, fwrk, limits.x = c(NaN, NaN), limits.y =
     }
     
     # Moon
-    fplot.tex = fplot.tex + annotate("text", x = moon.x, y = -0.08, label = "Moon", size = 5)
+    if(isPrimary)
+    {
+      fplot.tex = fplot.tex + annotate("text", x = moon.x, y = -0.08, label = "Moon", size = 5)
+    }
   } else
   {
     warning('Unknown framework: should be SEM or EM.')
@@ -284,14 +302,18 @@ fpp_path_traj <- function(df, filename, fwrk, limits.x = c(NaN, NaN), limits.y =
   #-----------------------------------------------------------------------------
   # Save in pdf, with annotations
   #-----------------------------------------------------------------------------
-  ggsave(fplot.pdf, width = xSize, height = ySize,  bg = "transparent",  file = paste0(filename, ".pdf")) #Save in pdf
-  ggsave(fplot.pdf, width = xSize, height = ySize,  bg = "transparent",  file = paste0(filename, ".png")) #Save in png
+  #fplot.pdf = fplot.pdf + issfd_theme
+  if(isPDF){ggsave(fplot.pdf, width = xSize, height = ySize,  bg = "transparent",  device=cairo_pdf,  file = paste0(filename, ".pdf"))} #Save in pdf
+  if(isPNG){ggsave(fplot.pdf, width = xSize, height = ySize,  bg = "transparent",  device=cairo_pdf,  file = paste0(filename, ".png"))} #Save in png
   
   #-----------------------------------------------------------------------------
   #Save in Latex, with annotations
   #-----------------------------------------------------------------------------
-  fplot.tex = fplot.tex + labs(x = xlab.tex, y = ylab.tex)
-  ggplot2tikz(fplot.tex, width = xSize, height = ySize, file = paste0(filename, "_tex.tex"))
+  if(isLaTeX)
+  {
+    fplot.tex = fplot.tex + labs(x = xlab.tex, y = ylab.tex)
+    ggplot2tikz(fplot.tex, width = xSize, height = ySize, file = paste0(filename, "_tex.tex"))
+  }
   
   
   return(fplot.pdf)

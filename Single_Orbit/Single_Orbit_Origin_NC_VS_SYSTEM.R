@@ -17,7 +17,7 @@
 # Used for the computation of the plots in the IOP article (2016).
 # BLB 2016
 # Working as of 30/08/2016.
-#--------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 #------------------------------------------------
 # Init
@@ -27,15 +27,15 @@ source("source/init.R")
 #------------------------------------------------
 # Select Models & libration point
 #------------------------------------------------
-Li    = "L2"
-MODEL = "QBCP"
-FWRK  = "SEM"
+Li    = "L1"
+MODEL = "BCP"
+FWRK  = "EM"
 
 #Working folder
-currentfolder = paste0(ooftdafolder, "plot/QBCP/DYNEQ/")
+currentfolder = paste0(ooftdafolder, "plot/", MODEL, "/DYNEQ/")
 
 #Period of the system
-Period = ifelse(MODEL=="QBCP", 6.79119387190792, 2*pi)
+Period = ifelse(MODEL=="QBCP", SEMperiod(FWRK), 2*pi)
 
 #------------------------------------------------
 #Select the libration point

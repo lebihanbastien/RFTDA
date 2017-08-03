@@ -1,6 +1,7 @@
 # Script to plot an orbit along with its associated precisions
-# in the parameterization method of the QBFBP/RTBP around L1/L2 of the Earth-Moon system
-#----------------------------------------------------------------------------------------
+# in the parameterization method of the QBFBP/RTBP around L1/L2 of the 
+# Earth-Moon system
+#-------------------------------------------------------------------------------
 
 #------------------------------------------------
 # Load libraries
@@ -16,9 +17,8 @@ library(png)
 #------------------------------------------------
 # Load Source files
 #------------------------------------------------
-source("source/folder.R")
-source("source/plot.R")
-source("source/routines.R")
+source("source/init.R")
+
 
 #------------------------------------------------
 # Select Models & libration point
@@ -28,7 +28,7 @@ MODEL = "QBCP"
 FWRK  = "EM"
 currentfolder = paste0(plotfolder(MODEL, FWRK, Li), "orbits/")
 size = "0_test" #1.5 7.5 15 30 45
-Period = ifelse(MODEL=="QBCP", 6.79119387190792, 2*pi)
+Period = ifelse(MODEL=="QBCP", SEMperiod(FWRK), 2*pi)
 maxPrec = 1e-6
 
 #------------------------------------------------
@@ -90,7 +90,7 @@ pH = pH+legend_inside_theme
 
 #--------------------------------------------------------------------------------------------------------------------------
 #                                             eI
-#--------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Load data
 #------------------------------------------------
 dflist = list();

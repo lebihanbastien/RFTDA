@@ -6,19 +6,48 @@
 #
 ################################################################################
 
+# Subroutines
+source("ProjMap/util/SUBROUTINES.R")
+
 #-------------------------------------------------------------------------------
 # Initial conditions
 #-------------------------------------------------------------------------------
 sl = 20;
 s0 = c(6, 0, 27, 0)
 
-# s1c = c(6, -36, 6.01935, 6.8824, 7.32741)
-# s3c = c(12, 24,-30.4489, -17.3909, -10.0765)
-
-s1c = c(7.32741, 2.78868)
-s3c = c(-10.0765, 15.3361)
+#-------------------------------------------------------------------------------
+# Planar case
+#-------------------------------------------------------------------------------
+s1c = c(6, -36, 6.01935, 6.8824, 7.32741)
+s3c = c(12, 24,-30.4489, -17.3909, -10.0765)
+#s1c = c(7.32741, 2.78868)
+#s3c = c(-10.0765, 15.3361)
 s2c = rep(0, length(s1c))
 s4c = rep(0, length(s1c))
+
+#-------------------------------------------------------------------------------
+# Planar case, used in CONT_MULTI.R, constant energy
+#-------------------------------------------------------------------------------
+s1c = c(5.93431)
+s3c = c(-33.7099)
+s2c = rep(0, length(s1c))
+s4c = rep(0, length(s1c))
+
+#-------------------------------------------------------------------------------
+# Planar case, used in CONT_MULTI.R, constant phase @ Pk section
+#-------------------------------------------------------------------------------
+s1c = c(6.99128)
+s3c = c(-15.9007)
+s2c = rep(0, length(s1c))
+s4c = rep(0, length(s1c))
+
+#-------------------------------------------------------------------------------
+# QHalo case
+#-------------------------------------------------------------------------------
+# s1c = c(28)
+# s2c = c(1.74347)
+# s3c = c(36)
+# s4c = c(1.74347)
 
 ss0 = data.frame(s1 = s1c, s2 = s2c, s3 = s3c, s4 = s4c)
 
@@ -50,6 +79,12 @@ for(k in seq(1,nrow(ss0)))
     orbit_eml2$label = label
     label = label +1
     
+    # Energy difference
+    orbit_eml2$dH_EM = orbit_eml2$H_EM - orbit_eml2$H0_EM 
+    
+    #Order
+    orbit_eml2 = orbit_eml2[order(orbit_eml2$t_NCEM),]
+    
     #Rbind
     orbits_eml2 = rbind(orbits_eml2, orbit_eml2)
   }
@@ -77,10 +112,58 @@ for(k in seq(1,nrow(ss0)))
     orbit_eml2$label = label
     label = label +1
     
+    # Energy difference
+    orbit_eml2$dH_EM = orbit_eml2$H_EM - orbit_eml2$H0_EM 
+    
+    #Order
+    orbit_eml2 = orbit_eml2[order(orbit_eml2$t_NCEM),]
+    
     #Rbind
     orbits_eml2_strob = rbind(orbits_eml2_strob, orbit_eml2)
   }
 }
+
+#===============================================================================
+# PLOTS: only the orbits
+#===============================================================================
+lineSize = 0.2
+
+pxy = plotdf_path(orbits_eml2,  "x_CM_NCEM", "y_CM_NCEM",  x_em,  y_em, "label", "Label", 1, lineSize = line.size)
+pxy
+
+pxz = plotdf_path(orbits_eml2,  "x_CM_NCEM", "z_CM_NCEM",  x_em,  z_em, "label", "Label", 1, lineSize = line.size)
+pxz
+
+pyz = plotdf_path(orbits_eml2,  "y_CM_NCEM", "z_CM_NCEM",  y_em,  z_em, "label", "Label", 1, lineSize = line.size)
+pyz
+
+ps1s3 = plotdf_path(orbits_eml2,  "s1", "s3",  s1_exp,  s3_exp, "label", "Label", 1, lineSize = line.size)
+ps1s3
+
+ps2s4 = plotdf_path(orbits_eml2,  "s2", "s4",  s2_exp,  s4_exp, "label", "Label", 1, lineSize = line.size)
+ps2s4
+
+#===============================================================================
+# PLOTS: only the strob maps
+#===============================================================================
+# Variations of the energy
+pstrop.dH = ggplot() + custom_theme
+pstrop.dH = geom_point_pretty(pstrop.dH, orbits_eml2_strob, 
+                                   aes(t_NCEM_T, dH_EM, color = label))
+pstrop.dH = pstrop.dH + labs(x = expression(t~("%T")), y =  expression(H(t) - H[0](t)))
+pstrop.dH
+
+# Variations of s1/s3
+pstrop.s1s3 = ggplot() + custom_theme
+pstrop.s1s3 = geom_point_pretty(pstrop.s1s3, orbits_eml2_strob, 
+                              aes(s1, s3, color = label))
+pstrop.s1s3 = pstrop.s1s3 + labs(x = s1_exp, y =  s3_exp)
+pstrop.s1s3
+
+
+#===============================================================================
+# PLOTS: superimposed on projection data
+#===============================================================================
 
 #-------------------------------------------------------------------------------
 # Plot : tiles (pmin_dist_SEM) in the s1_CMU_EM/s3_CMU_EM space

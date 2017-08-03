@@ -45,8 +45,12 @@ pS1_limits=FALSE
 pG_limits_y = c(-12, -1);
 pG_breaks_y = seq(-16,0,2);
 
+pE_scale_x = scale_x_continuous()
+pE_scale_y = scale_y_log10(breaks = 10^(-8:0*2), limits=c(1e-12,1e-1))
+
 #------------------------------------------------
 # Process data
 #------------------------------------------------
-#source("Emap/Eplot.R")
-source("Emap/Eplot_TEX.R")
+# source("Emap/Eplot.R")
+# source("Emap/Eplot_TEX.R")
+source("Emap/Eplot_TEX_PhD.R")

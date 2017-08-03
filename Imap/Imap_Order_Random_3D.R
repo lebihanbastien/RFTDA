@@ -9,8 +9,8 @@ source("source/init.R")
 #------------------------------------------------
 # Select Models & libration point
 #------------------------------------------------
-Li    = "L2"
-Lit    = "$L_2$"
+Li    = "L1"
+Lit    = "$L_1$"
 MODEL = "QBCP"
 FWRK  = "EM"
 Type  = "rand" #selection or global

@@ -1,6 +1,6 @@
 # Script to plot an orbit along with its associated precisions
 # in the parameterization method of the QBFBP/RTBP around L1/L2 of the Earth-Moon system
-#----------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 #------------------------------------------------
 # Init
@@ -13,12 +13,19 @@ source("source/init.R")
 Li    = "L2"
 MODEL = "QBCP"
 FWRK  = "EM"
-currentfolder = paste0(plotfolder(MODEL, FWRK, Li), "Serv/")
-size = "-51.0435_test" #1.5 7.5 15 30 45
-sizep = "51.0435_test"
+
+# If from Server
+# currentfolder = paste0(plotfolder(MODEL, FWRK, Li), "Serv/")
+# size = "-51.0435_test" #1.5 7.5 15 30 45
+# sizep = "51.0435_test"
+
+# If local
+currentfolder = paste0(plotfolder(MODEL, FWRK, Li), "orbits/")
+size =  "80_test" #1.5 7.5 15 30 45
+sizep = "80_test"
 
 # Orders
-dfindex  = c(8,10,15,20,25,30)
+dfindex  = c(10,15,20)
 dfnumber = 1:length(dfindex)
 maxOrder = max(dfindex)
 
@@ -35,7 +42,7 @@ muR = muR(FWRK);
 gamma = gamma(Li, FWRK);
 c1    =  c1(Li, FWRK);
 L     = Ldist(FWRK)
-Period = ifelse(MODEL=="QBCP", 6.79119387190792, 2*pi)
+Period = ifelse(MODEL=="QBCP", SEMperiod(FWRK), 2*pi)
 
 #------------------------------------------------
 # Type of plot (can be changed at will)

@@ -54,7 +54,7 @@ if(isMULTFAM && !empty(proj_cont_fam))
   ggsave(ppEM_fam, width = xSize, height = ySize,  file = paste0(filename, ".png")) #Save png
   
   # Save in pdf
-  #ggsave(ppEM_fam, width = xSize, height = ySize,  bg = "transparent",  file = paste0(filename, ".pdf")) #Save in pdf
+  ggsave(ppEM_fam, width = xSize, height = ySize,  bg = "transparent", device=cairo_pdf, file = paste0(filename, ".pdf")) #Save in pdf
 }
 
 #===============================================================================
@@ -146,7 +146,7 @@ if(isMULTFAM && !empty(traj_cont_fam))
   # on the plots
   #---------------------------------------------------------------------------
   label_min = lab_min_vec[FAM]
-  label_max = max(one_family$label) - 10 #lab_min_vec[FAM]
+  label_max = max(one_family$label) - lab_min_vec[FAM]
   
   minmaxlabel = one_family$label > label_min & one_family$label < label_max
   one_family  = one_family[which(minmaxlabel),]
@@ -155,7 +155,7 @@ if(isMULTFAM && !empty(traj_cont_fam))
   traj_cont_some = one_family[which(condition),]
   
   #---------------------------------------------------------------------------
-  # If FAM == 4, we get rid of some solutions, because they are too much of them
+  # If FAM == 4, we get rid of some solutions, because there are too much of them
   #---------------------------------------------------------------------------
   if(FAM == 4)
   {
@@ -185,7 +185,7 @@ if(isMULTFAM && !empty(traj_cont_fam))
   #fpp_path_some(traj_cont_some, filename, values[FAMIND]) (old version)
   
   fpp_path_traj(traj_cont_some, filename, "SEM", 
-                limits.x = c(-1.5, 0.3), limits.y = c(-1.3, +1.3),
+                limits.x = c(-1.5, 0.3), limits.y = c(-1.1, +1.1),
                 xlab = x_sem, ylab = y_sem,
                 xlab.tex = "$x^{sem}$", ylab.tex = "$y^{sem}$",
                 colour.traj = values[FAMIND], 

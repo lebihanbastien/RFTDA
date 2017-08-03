@@ -36,7 +36,7 @@ time_desired  =  ratio_desired*CST_SEM_PERIOD_EM;
 #Family
 #===============================================================================
 isFAM  = TRUE  #if FALSE, no family is used
-FAM0   = 11 #41 is cont
+FAM0   = 1 #41 is cont
 PRINT  = TRUE
 FAMILY = switch(isFAM, "TRUE" = paste0("_fam", FAM0), "FALSE" = "")
 
@@ -67,7 +67,7 @@ FAMVEC     = c(1, 3, 5, 6, 7)
 FAMIND     = 1
 FAM        = FAMVEC[FAMIND]
 # Labels to get rid of at the beginning and at the end of the families
-lab_min_vec = c(10, 5, 0, 0,  0, 0, 10)
+lab_min_vec = c(10, 5, 0, 0,  10, 0, 10)
 lab_max_vec = c(15, 5, 0, 15, 0, 0, 15)
 
 #===============================================================================
@@ -125,9 +125,17 @@ if(isMULTFAM)
   #-----------------------------------------------------------------------------
   # Continuation results - trajectories
   #-----------------------------------------------------------------------------
-  #traj_cont_fam = get_traj_cont(FILE_PREFIX_CONT_TRAJ, FILE_SUFFIX_CONT_TRAJ, paste0("_fam", FAM), PRINT)
-  #traj_cont_fam$family = FAM
-  # 
+  traj_cont_fam = get_traj_cont(FILE_PREFIX_CONT_TRAJ, FILE_SUFFIX_CONT_TRAJ, paste0("_fam", FAM), PRINT)
+  traj_cont_fam$family = FAM
+  
+  # To account for the bad data reading
+  if( FAMIND != 1)
+  {
+    traj_cont_fam$y_CMS_NCSEM = traj_cont_fam$x_CMS_NCSEM
+    traj_cont_fam$x_CMS_NCSEM = traj_cont_fam$t_CMU_SEM
+    traj_cont_fam$type = 2
+  }
+  
   # #-----------------------------------------------------------------------------
   # # Postprocess
   # #-----------------------------------------------------------------------------
@@ -210,46 +218,10 @@ if(nrow(traj_cont) > 0 && nrow(proj_cont) >0)
 #===============================================================================
 # Get results from JPL file
 #===============================================================================
-get_traj_cont_jpl <- function(FILE_PREFIX_CONT_JPL, FILE_SUFFIX_CONT_JPL, FAMILY="")
-{
-  #-----------------------------------------------------------------------------
-  # Column names
-  #-----------------------------------------------------------------------------
-  names = c(  "label",  "coord", "t_eph", 
-              "t_SEM", 
-              "x_NCSEM", "y_NCSEM", "z_NCSEM", 
-              "px_NCSEM", "py_NCSEM", "pz_NCSEM",
-              "t_EM",
-              "x_NCEM", "y_NCEM", "z_NCEM", 
-              "px_NCEM", "py_NCEM", "pz_NCEM")
-  
-  #-----------------------------------------------------------------------------
-  # Build the filename 
-  #-----------------------------------------------------------------------------
-  filepre_cont_traj  = paste0(FILE_PREFIX_CONT_JPL, FILE_SUFFIX_CONT_JPL, FAMILY);
-  #-----------------------------------------------------------------------------
-  filename_cont_traj = paste0(filepre_cont_traj, ".bin");
-  
-  # Read data
-  #-----------------------------------------------------------------------------
-  if (file.exists(filename_cont_traj))
-  {
-    #Read table
-    traj_cont = dffbinary(filename_cont_traj, 17, names)
-    
-  }
-  
-  return(traj_cont)
-}
-
-#-------------------------------------------------------------------------------
-# Continuation trajectories, jpl refinement
-#-------------------------------------------------------------------------------
-traj_cont_jpl = get_traj_cont_jpl(FILE_PREFIX_CONT_JPL, FILE_SUFFIX_CONT_JPL, FAMILY="")
+traj_cont_jpl = get_traj_comp(FILE_PREFIX_CONT_JPL, FILE_SUFFIX_CONT_JPL, FAMILY="")
 
 #===============================================================================
 # Plots (requires to load the POSTPROCESS.R script before)
 #===============================================================================
 source("ProjMap/POSTPROCESS.R")
-source("ProjMap/PLOTS.R")
 

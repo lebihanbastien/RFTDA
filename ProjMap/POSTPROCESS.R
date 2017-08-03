@@ -1,6 +1,6 @@
 ################################################################################
 # R script used in EML2_TO_SEML.R for the postprocess 
-# of a projection map (connections between EML2 and SEML1,2)
+# of a projection map (connections from EML2 to SEML1,2)
 #
 # WARNING: MAIN.R or PROJMAP.R must be loaded once before.
 
@@ -59,15 +59,13 @@ s3_value = 0;
 proj_map_source$pmin_dist_SI = proj_map_source$pmin_dist_SEM*CST_DIST_PRIM_SEM
 #Norm of yv
 proj_map_source$nf_CM_NCSEM = sqrt((-1/CST_GAMMA_LIB_SEM*proj_map_source$xf_CM_SEM + CST_C1_LIB_SEM)^2 + (1/CST_GAMMA_LIB_SEM*proj_map_source$yf_CM_SEM)^2)
+
 #Get the distance wrt to the center of s1_CM_SEM/s3_CM_SEM
 proj_map_source$ns_CM_SEM = sqrt(proj_map_source$s1_CM_SEM^2 + proj_map_source$s3_CM_SEM^2)
 #Get the distance wrt to the center of s1EM/s3EM
 proj_map_source$ns_CMU_EM = abs(proj_map_source$s1_CMU_EM)
-#Position gap on axes
-proj_map_source$dx_CM_SEM  = proj_map_source$xf_CM_SEM  - proj_map_source$xp_CM_SEM
-proj_map_source$dy_CM_SEM  = proj_map_source$yf_CM_SEM  - proj_map_source$yp_CM_SEM
-proj_map_source$dpx_CM_SEM = proj_map_source$pxf_CM_SEM - proj_map_source$pxp_CM_SEM
-proj_map_source$dpy_CM_SEM = proj_map_source$pyf_CM_SEM - proj_map_source$pyp_CM_SEM
+
+
 
 #===============================================================================
 #DV
@@ -97,8 +95,10 @@ sf_CM_SEM_mid = mean(proj_map_source$sf_CM_SEM)
 #Time
 #===============================================================================
 #Get the initial time as a modulo of T
-proj_map_source$r0_CMU_EMT = proj_map_source$t0_CMU_EM/CST_SEM_PERIOD_EM
-proj_map_source$r0_CMU_EMT = round(proj_map_source$r0_CMU_EMT %% 1, digits= 4)
+proj_map_source$r0_CMU_EMT     = proj_map_source$t0_CMU_EM/CST_SEM_PERIOD_EM
+proj_map_source$r0_CMU_EMT     = round(proj_map_source$r0_CMU_EMT %% 1, digits= 4)
+proj_map_source$r0_CMU_EMT_mod = r0_modulo(proj_map_source$r0_CMU_EMT) #same between 0.5 and 1.5
+
 #Get the initial time as a percentage of T
 proj_map_source$t0_CMU_EMT = proj_map_source$t0_CMU_EM/CST_SEM_PERIOD_EM
 #Get the final time as a percentage of T

@@ -70,8 +70,6 @@ dffbinaryv<- function(FILENAME, VNCOL, LNAMES, PRINT = TRUE)
   size = 1000*(size+1)/VNCOL;
   close(newdata)
   
-  
-  
   #-----------------------------------------------------------------------------
   # We check if any value of VNCOL matches. If the remainder is zero, 
   # then the number of columns in VNCOL[n] matches the size of the data.

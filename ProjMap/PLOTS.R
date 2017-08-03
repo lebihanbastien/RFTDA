@@ -1,6 +1,6 @@
 ################################################################################
 # R script used in EML2_TO_SEML.R for the plotting 
-# of a projection map (connections between EML2 and SEML1,2)
+# of a projection map (connections from EML2 to SEML1,2)
 #
 # WARNING: MAIN.R must be loaded once before.
 #
@@ -24,7 +24,9 @@
 #===============================================================================
 # POINTS : pmin_dist_SEM in the x0_CMU_NCEM/y0_CMU_NCEM space
 #===============================================================================
-pp_x0EM_y0EM_eP = plotdf_point(proj_map_tem, "x0_CMU_NCEM", "y0_CMU_NCEM", "x0 (EML2)", "y0 (EML2)", "pmin_dist_SEM", "pmin_dist_SEM", 0, pointSize = 3)
+pp_x0EM_y0EM_eP = plotdf_point(proj_map_tem, "x0_CMU_NCEM", "y0_CMU_NCEM", 
+                               "x0 (EML2)", "y0 (EML2)", 
+                               "pmin_dist_SEM", "pmin_dist_SEM", 0, pointSize = 0.5)
 pp_x0EM_y0EM_eP = pp_x0EM_y0EM_eP + ggtitle_t0
 pp_x0EM_y0EM_eP = pp_x0EM_y0EM_eP + scg_pem
 
@@ -38,9 +40,6 @@ if(!empty(proj_cont))
 
 #Display
 pp_x0EM_y0EM_eP
-
-
-
 
 #-------------------------------------------------------------------------------
 # Plot : tiles (pmin_dist_SEM) in the s1_CMU_EM/s3_CMU_EM space
@@ -96,7 +95,7 @@ pt_s1EM_t0EM_eP_comp
 #-------------------------------------------------------------------------------
 # Plot : tiles (pmin_dist_SEM) in the s1_CMU_EM/s3_CMU_EM space
 #-------------------------------------------------------------------------------
-vcross  = c("2")#, "2.2", "3", "3.1", "4", "4.2", "5", "6") 
+vcross  = c("2", "2.2", "3", "3.1", "4", "4.2", "5", "6") 
 vcolors = brewer.pal(8,"Dark2")
 vmatchs = c("2" = vcolors[1], "2.2" = vcolors[2], 
             "3" = vcolors[3], "3.1" = vcolors[4], "4" = vcolors[5],
@@ -178,12 +177,12 @@ if("H0_EM" %in% colnames(proj_map_tem))
 #-------------------------------------------------------------------------------
 if(!empty(proj_map_tem_s2s4))
 {
-pt_s2EM_s4EM_eP = plotdf_tile_1(proj_map_tem_s2s4, "s2_CMU_EM", "s4_CMU_EM", 
-                                s2_exp, s4_exp, "pmin_dist_SEM", "pmin_dist_SEM",
-                                FALSE)
-pt_s2EM_s4EM_eP = pt_s2EM_s4EM_eP + ggtitle_t0
-pt_s2EM_s4EM_eP = pt_s2EM_s4EM_eP + scg_pem
-pt_s2EM_s4EM_eP
+  pt_s2EM_s4EM_eP = plotdf_tile_1(proj_map_tem_s2s4, "s2_CMU_EM", "s4_CMU_EM", 
+                                  s2_exp, s4_exp, "pmin_dist_SEM", "pmin_dist_SEM",
+                                  FALSE)
+  pt_s2EM_s4EM_eP = pt_s2EM_s4EM_eP + ggtitle_t0
+  pt_s2EM_s4EM_eP = pt_s2EM_s4EM_eP + scg_pem
+  pt_s2EM_s4EM_eP
 }
 
 #-------------------------------------------------------------------------------
@@ -413,10 +412,12 @@ if(!empty(traj_cont))
   #pp_x0EM_y0EM_some = plotdf_point(proj_map_tem, "x0_CMU_NCEM", "y0_CMU_NCEM", x_em, y_em, "pmin_dist_SEM", "pmin_dist_SEM", 0, pointSize = 3)
   
   # Adding plots
-  pp_x0EM_y0EM_some = ggplot()+ geom_path(data = traj_cont_some, 
-                                aes(x = x_CMS_NCEM, y = y_CMS_NCEM, 
+  pp_x0EM_y0EM_some = ggplot()+ geom_path(data = traj_cont_some[which(traj_cont_some$t_CMU_SEM < 0.85),], 
+                                aes(x = x_CMS_NCEM, y = z_CMS_NCEM, 
                                     group = label), colour = values[1],
-                                size = 1)
+                                size = 0.8)
+  pp_x0EM_y0EM_some
+  
   #Zoom
   pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + scale_x_continuous(limits = c(-0.3, 0.3))
   pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + scale_y_continuous(limits = c(-0.75, 0.7))
@@ -432,7 +433,8 @@ if(!empty(traj_cont))
   
   #Add EMLi
   pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + geom_point(data = dfemli, aes(x= x_NC, y = y_NC), size = 4) 
-  #pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + annotate("text", x = 0, y = -0.08,  label = "EML[2]", size = 5, parse = TRUE)
+  pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + annotate("text", x = 0, y = -0.08,  label = "bold(EML[2])", color = "white", size = 5, parse = TRUE)
+  pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + annotate("text", x = 0, y = -0.08,  label = "EML[2]", size = 5, parse = TRUE)
   
   #Add Moon
   pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + geom_point(data = dfmoon_eml, aes(x= x_NC, y = y_NC), size = 5) 
@@ -455,7 +457,7 @@ if(!empty(traj_cont))
     # Save in pdf, in TIMES NEW ROMAN
     filename = paste0(filepre, "_x0EM_y0EM_some")
     pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + issfd_theme
-    #ggsave(pp_x0EM_y0EM_some, width = xSize, height = ySize,  bg = "transparent",  device=cairo_pdf,  file = paste0(filename, ".pdf")) #Save in pdf
+    ggsave(pp_x0EM_y0EM_some, width = xSize, height = ySize,  bg = "transparent",  device=cairo_pdf,  file = paste0(filename, ".pdf")) #Save in pdf
     ggsave(pp_x0EM_y0EM_some, width = xSize, height = ySize,  bg = "transparent",  file = paste0(filename, ".png")) #Save in png
   
     pp_x0EM_y0EM_some = pp_x0EM_y0EM_some + labs(x = "$x^{em}$", y = "$y^{em}$")
@@ -1059,7 +1061,7 @@ if(!empty(traj_cont_jpl))
   pp_jpl_NCSEM = pp_jpl_NCSEM + geom_point(data = dfsemli, aes(x= x_NC, y = y_NC), size = 4) 
   #Add Earth
   pp_jpl_NCSEM = pp_jpl_NCSEM + geom_point(data = dfearth_seml, aes(x= x_NC, y = y_NC), size = 4) 
-  
+  pp_jpl_NCSEM
   
   #-----------------------------------------------------------------------------
   # For pdf, png and R display
@@ -1103,26 +1105,26 @@ if(!empty(traj_cont_jpl))
   #-----------------------------------------------------------------------------
   # For tex, careful, big files!
   #-----------------------------------------------------------------------------
-  pp_jpl_NCSEM_tex = pp_jpl_NCSEM
-  
-  #Labels
-  pp_jpl_NCSEM_tex = pp_jpl_NCSEM_tex + labs(x = "$x^{sem}$", y = "$y^{sem}$")
-  
-  #Annotate
-  pp_jpl_NCSEM_tex = pp_jpl_NCSEM_tex + annotate("text", x = 0, y = -0.09,  label = "SEML$_2$", size = 5, parse = TRUE)
-  
-  # Earth
-  pp_jpl_NCSEM_tex = pp_jpl_NCSEM_tex + annotate("text", x = -1, y = -0.09, label = "Earth", size = 5)
-  
-  #Display
-  pp_jpl_NCSEM_tex 
-  
-  # Save
-  if(ISSAVED)
-  {
-    filename = paste0(filepre, "_pp_jpl_NCSEM")
-    ggplot2tikz(pp_jpl_NCSEM_tex, width = xSize, height = ySize, file = paste0(filename, "_tex.tex"))
-  }
+  # pp_jpl_NCSEM_tex = pp_jpl_NCSEM
+  # 
+  # #Labels
+  # pp_jpl_NCSEM_tex = pp_jpl_NCSEM_tex + labs(x = "$x^{sem}$", y = "$y^{sem}$")
+  # 
+  # #Annotate
+  # pp_jpl_NCSEM_tex = pp_jpl_NCSEM_tex + annotate("text", x = 0, y = -0.09,  label = "SEML$_2$", size = 5, parse = TRUE)
+  # 
+  # # Earth
+  # pp_jpl_NCSEM_tex = pp_jpl_NCSEM_tex + annotate("text", x = -1, y = -0.09, label = "Earth", size = 5)
+  # 
+  # #Display
+  # pp_jpl_NCSEM_tex 
+  # 
+  # # Save
+  # if(ISSAVED)
+  # {
+  #   filename = paste0(filepre, "_pp_jpl_NCSEM")
+  #   ggplot2tikz(pp_jpl_NCSEM_tex, width = xSize, height = ySize, file = paste0(filename, "_tex.tex"))
+  # }
   
   
   

@@ -13,7 +13,7 @@ Type      = "s1s2s3s4"#"s1eqms3" #s1, s1eqs3, s1eqms3, s3, s1eq2s2eqs3eq2s4
 order     = "20"
 ofs_order = "30"
 Energy    = "0"#-10 #0.01 #0.01 #0.0025, 0.005, 0.0075
-vorders   = seq(6,30,2)
+vorders   = c(seq(6,26,4),22)
 
 #------------------------------------------------
 # Plotting parameters
@@ -40,7 +40,12 @@ pY_breaks_y_values = seq(-10,0,2)
 
 pS1_limits=FALSE
 
+pE_scale_x = scale_x_continuous(labels = scientific_format())
+pE_scale_y = scale_y_log10(breaks = 10^(-8:0*2), limits=c(1e-17,1e-1))
+
 #------------------------------------------------
 # Process data
 #------------------------------------------------
-source("Emap/Eplot.R")
+# source("Emap/Eplot.R")
+# source("Emap/Eplot_TEX.R")
+source("Emap/Eplot_TEX_PhD.R")

@@ -12,9 +12,9 @@ library(grid)
 #------------------------------------------------
 source("source/folder.R")
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # color-blind-friendly palettes
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # The palette with grey:
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
@@ -27,34 +27,34 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"
 # To use for line and point colors, add
 #scale_colour_manual(values=cbPalette)
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Default size
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 xSize = 9.01
 ySize = 7.66
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 #Constants
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 #Fontsize
 fontsize = list(title = 20,    #fontsize for title
                 label = 20,
                 legend = 18,
-                big   = 30)   #fontsize for labels   
+                big   = 30) 
 
 #Linesize
 linesize = list(line = 2, point = 2)
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 #Themes
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 #Base custom theme
 custom_theme = theme(
   #Background
   plot.background = element_rect(fill = "transparent", colour = NA),
   #Axes
-  axis.text.x  = element_text(colour="grey20", size=fontsize[["label"]], angle=0, hjust = 0.5, vjust=  0.5, margin = margin(10,1,1,1)),
-  axis.text.y  = element_text(colour="grey20", size=fontsize[["label"]], angle=0, hjust = 1,   vjust=  0.5, margin = margin(1,5,1,1)),
+  axis.text.x  = element_text(colour="grey20", size=fontsize[["label"]], angle=0, hjust = 0.5, vjust=  0.5),#, margin = margin(10,1,1,1)),
+  axis.text.y  = element_text(colour="grey20", size=fontsize[["label"]], angle=0, hjust = 1,   vjust=  0.5),#, margin = margin(1,5,1,1)),
   axis.title.x = element_text(colour="grey20", size=fontsize[["label"]], vjust =  0.5, margin = margin(20,1,1,1)),
   axis.title.y = element_text(colour="grey20", size=fontsize[["label"]], vjust =  0.5, margin = margin(1,15,1,1)),
   #Legend
@@ -62,7 +62,8 @@ custom_theme = theme(
   legend.title = element_text(colour="grey20", size=fontsize[["legend"]]),
   legend.title.align   = 0.5,
   legend.key.size      = unit(1, 'cm'),
-  legend.key.width     = unit(2, 'cm')
+  legend.key.width     = unit(2, 'cm'),
+  legend.background = element_rect(fill = "transparent", colour = NA)
 )
 
 #BW custom theme
@@ -70,8 +71,8 @@ custom_bw_theme = theme_bw() + theme(
   #Background
   plot.background = element_rect(fill = "transparent", colour = NA),
   #Axes
-  axis.text.x  = element_text(colour="grey20", size=fontsize[["label"]], angle=0, hjust = 0.5, vjust=  0.5, margin = margin(10,1,1,1)),
-  axis.text.y  = element_text(colour="grey20", size=fontsize[["label"]], angle=0, hjust = 1,   vjust=  0.5, margin = margin(1,5,1,1)),
+  axis.text.x  = element_text(colour="grey20", size=fontsize[["label"]], angle=0, hjust = 0.5, vjust=  0.5),#, margin = margin(10,1,1,1)),
+  axis.text.y  = element_text(colour="grey20", size=fontsize[["label"]], angle=0, hjust = 1,   vjust=  0.5),#, margin = margin(1,5,1,1)),
   axis.title.x = element_text(colour="grey20", size=fontsize[["label"]], vjust =  0.5, margin = margin(20,1,1,1)),
   axis.title.y = element_text(colour="grey20", size=fontsize[["label"]], vjust =  0.5, margin = margin(1,15,1,1)),
   #Legend
@@ -79,7 +80,8 @@ custom_bw_theme = theme_bw() + theme(
   legend.title = element_text(colour="grey20", size=fontsize[["legend"]]),
   legend.title.align   = 0.5,
   legend.key.size      = unit(1, 'cm'),
-  legend.key.width     = unit(2, 'cm')
+  legend.key.width     = unit(2, 'cm'),
+  legend.background = element_rect(fill = "transparent", colour = NA)
 )
 
 #ISSFD theme
@@ -111,8 +113,9 @@ big_font_theme = theme(
 
 #With legend inside the plot
 legend_inside_theme = custom_theme + theme(
-  legend.justification = c(1,0),         #legend inside plot
-  legend.position      = c(1,0)          #legend inside plot
+  legend.justification = c(1,0),          #legend inside plot
+  legend.position      = c(1,0),          #legend inside plot
+  legend.background = element_rect(fill = "white", colour = "white")
 )
 
 #With legend inside the plot
@@ -135,11 +138,104 @@ blank_theme = theme(
   axis.ticks=element_blank()
 )
 
+# Position of the legen
+legend_pos <- function(vec)
+{
+  legend = theme(
+    legend.justification = vec,          #legend inside plot
+    legend.position      = vec,          #legend inside plot
+    legend.background = element_rect(fill = "white", colour = "white"))
+  return(legend)
+}
+
+# Darker background
+theme_pgrey <- function(color)
+{
+  th = custom_theme + theme(panel.background = element_rect(fill = color), legend.key = element_rect(fill = color))
+  return(th)
+}
 
 
-#--------------------------------------------------------------------------#
+# Set CM fonts
+set_font_cm <- function(ppt)
+{
+  ppt = ppt + theme(
+                    # Titles
+                    axis.title.x  = element_text(family="jsMath-cmmi10", size=fontsize[["label"]]+5),
+                    axis.title.y  = element_text(family="jsMath-cmmi10", size=fontsize[["label"]]+5)
+                    # # Figures
+                    # axis.text.y = element_text(family="jsMath-cmr10"),
+                    # axis.text.x = element_text(family="jsMath-cmr10")
+                    )
+  return(ppt)
+}
+
+# Set CM fonts (x)
+set_font_cm_x <- function(ppt)
+{
+  ppt = ppt + theme(
+    # Titles
+    axis.title.x  = element_text(family="jsMath-cmmi10", size=fontsize[["label"]]+5)
+  )
+  return(ppt)
+}
+
+# Set CM fonts (y)
+set_font_cm_y <- function(ppt)
+{
+  ppt = ppt + theme(
+    # Titles
+    axis.title.y  = element_text(family="jsMath-cmmi10", size=fontsize[["label"]]+5)
+  )
+  return(ppt)
+}
+
+# Set CM fonts (extended)
+set_font_cm_ex <- function(ppt)
+{
+  ppt = ppt + theme(
+    # Titles
+    axis.title.x  = element_text(family="jsMath-cmmi10", size=fontsize[["label"]]+5),
+    axis.title.y  = element_text(family="jsMath-cmmi10", size=fontsize[["label"]]+5),
+    legend.title  = element_text(family="jsMath-cmmi10", size=fontsize[["legend"]]+5)
+    # # Figures
+    # axis.text.y = element_text(family="jsMath-cmr10"),
+    # axis.text.x = element_text(family="jsMath-cmr10")
+  )
+  return(ppt)
+}
+
+
+# Set CM fonts (just the legend)
+set_font_cm_leg <- function(ppt)
+{
+  ppt = ppt + theme(
+    # Titles
+    legend.title  = element_text(family="jsMath-cmmi10", size=fontsize[["legend"]]+5)
+  )
+  return(ppt)
+}
+
+
+# Annotations in black and white
+annotate_bold <- function(ppt, x = 0, y = 0, label ="Default", size = 5, parse = FALSE)
+{
+  if(parse)
+  {
+    ppt = ppt + annotate("text", x = x, y = y,  label = paste0("bold(", label, ")"), colour = "white", size = size, parse = TRUE)
+    ppt = ppt + annotate("text", x = x, y = y,  label = label, colour = "black", size = size, parse = TRUE)
+  }else
+  {
+    ppt = ppt + annotate("text", x = x, y = y, label = label, colour = "white", size = size+0.1)
+    ppt = ppt + annotate("text", x = x, y = y, label = label, size = size)
+  }
+  
+  return(ppt)
+}
+
+#------------------------------------------------------------------------------#
 # Plot function for line plots
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 plotdf_line<- function(ttm,              #dataframe
                        colx,             #x
                        coly,             #y
@@ -153,21 +249,19 @@ plotdf_line<- function(ttm,              #dataframe
                        lineSize,         #size of the lines
                        lineType)         #type of the lines
 {
-  
-  
   #Ggplot init
-  #--------------------------------------
+  #-----------------------------------------------------------------------------
   px = ggplot()
   
   #Changing temporarily the names of the desired columns (x & y)
-  #--------------------------------------
+  #-----------------------------------------------------------------------------
   i1 = which(colnames(ttm) == colx)
   i2 = which(colnames(ttm) == coly)
   colnames(ttm)[i1] = "temp1"
   colnames(ttm)[i2] = "temp2"
   
   #LineType & LineSize
-  #--------------------------------------
+  #-----------------------------------------------------------------------------
   if(!missing(lineSize)) 
   {
     lSize = lineSize
@@ -176,7 +270,7 @@ plotdf_line<- function(ttm,              #dataframe
   }
   
   #LineType & LineSize
-  #--------------------------------------
+  #-----------------------------------------------------------------------------
   if(!missing(lineType)) 
   {
     lType = lineType
@@ -186,7 +280,7 @@ plotdf_line<- function(ttm,              #dataframe
   
   
   #Plot
-  #--------------------------------------
+  #-----------------------------------------------------------------------------
   if(!missing(colorCol)) #if a color scheme is provided
   {
     #Changing temporarily the names of the desired columns (colorCol)
@@ -267,7 +361,7 @@ plotdf_line<- function(ttm,              #dataframe
   
   
   #Labels
-  #--------------------------------------
+  #-----------------------------------------------------------------------------
   if(!missing(xlabel)) xlabeli = xlabel
   else xlabeli = colx
   
@@ -278,18 +372,18 @@ plotdf_line<- function(ttm,              #dataframe
   
   
   #Theme
-  #--------------------------------------
+  #-----------------------------------------------------------------------------
   px= px + custom_theme 
   
   
   #Return the plot handle
-  #--------------------------------------
+  #-----------------------------------------------------------------------------
   return(px)
 }
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Plot function for smooth plots
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 plotdf_smooth<- function(ttm,              #dataframe
                        colx,             #x
                        coly,             #y
@@ -438,9 +532,9 @@ plotdf_smooth<- function(ttm,              #dataframe
 }
 
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Plot function for line plots
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 plotdf_point<- function(ttm,               #dataframe
                         colx,              #x
                         coly,              #y
@@ -588,9 +682,9 @@ plotdf_point<- function(ttm,               #dataframe
 }
 
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Plot function for path plots
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 plotdf_path<- function(ttm,              #dataframe
                        colx,             #x
                        coly,             #y
@@ -742,10 +836,10 @@ plotdf_path<- function(ttm,              #dataframe
   return(px)
 }
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Tile plot
 # €€TODO: adapt this routine to look like the rest of the plot routines
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 plotdf_tile_n<- function(ttm,              #dataframe
                          colx,             #x
                          coly,             #y
@@ -899,9 +993,9 @@ plotdf_tile_n<- function(ttm,              #dataframe
   return(px)
 }
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Tile plot with low/high color
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 plotdf_tile_1<- function(ttm,              #dataframe
                          colx,             #x
                          coly,             #y
@@ -1047,10 +1141,10 @@ plotdf_tile_1<- function(ttm,              #dataframe
 }
 
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Tile plot, old edition
 # €€TODO: adapt this routine to look like the rest of the plot routines
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 plotdf_tile<- function(ttm_c, st1, st2, isLegendOn, scale_midpoint, title, legendOnTop) 
 {
   
@@ -1098,19 +1192,20 @@ plotdf_tile<- function(ttm_c, st1, st2, isLegendOn, scale_midpoint, title, legen
   return(px)
 }
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 #Extract Legend 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 g_legend<-function(a.gplot){ 
   tmp <- ggplot_gtable(ggplot_build(a.gplot)) 
   leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
   legend <- tmp$grobs[[leg]] 
   return(legend)} 
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Define the circle; add a point at the center if the 'pie slice' if the shape is to be filled
-#--------------------------------------------------------------------------#
-circleFun <- function(center=c(0,0), diameter=1, npoints=100, start=0, end=2, filled=TRUE){
+#------------------------------------------------------------------------------#
+circleFun <- function(center=c(0,0), diameter=1, npoints=100, start=0, end=2, filled=TRUE)
+{
   tt <- seq(start*pi, end*pi, length.out=npoints)
   df <- data.frame(
     x = center[1] + diameter / 2 * cos(tt),
@@ -1122,20 +1217,20 @@ circleFun <- function(center=c(0,0), diameter=1, npoints=100, start=0, end=2, fi
   return(df)
 }
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Add the Moon to a given dataframe
-#--------------------------------------------------------------------------#
-addMoon <- function(porb, x, y, moonR, surfSize, cratSize)
+#------------------------------------------------------------------------------#
+addMoon <- function(porb, x, y, primR, surfSize, cratSize)
 {
-  moon  = circleFun(center = c(x, y), diameter = moonR, npoints = 100, start = 0, end = 2, filled = TRUE)
-  moonT = circleFun(center = c(x, y), diameter = moonR, npoints = 100, start = 0, end = 2, filled = FALSE)
+  moon  = circleFun(center = c(x, y), diameter = primR, npoints = 100, start = 0, end = 2, filled = TRUE)
+  moonT = circleFun(center = c(x, y), diameter = primR, npoints = 100, start = 0, end = 2, filled = FALSE)
   
-  fac = moonR/1737.10
+  fac = primR/1737.10
   fac
-  crat  = circleFun(center = c(x-100*fac, y-300*fac), diameter = 1e-1*moonR,   npoints = 100, start = 0, end = 2, filled = FALSE)
-  crat2 = circleFun(center = c(x+400*fac, y+300*fac), diameter = 2.5e-1*moonR, npoints = 100, start = 0, end = 2, filled = FALSE)
-  crat3 = circleFun(center = c(x-500*fac, y+400*fac), diameter = 1.7e-1*moonR, npoints = 100, start = 0, end = 2, filled = FALSE)
-  crat4 = circleFun(center = c(x+500*fac, y-700*fac), diameter = 3e-1*moonR,   npoints = 100, start = 0.2, end = 1.2, filled = FALSE)
+  crat  = circleFun(center = c(x-100*fac, y-300*fac), diameter = 1e-1*primR,   npoints = 100, start = 0, end = 2, filled = FALSE)
+  crat2 = circleFun(center = c(x+400*fac, y+300*fac), diameter = 2.5e-1*primR, npoints = 100, start = 0, end = 2, filled = FALSE)
+  crat3 = circleFun(center = c(x-500*fac, y+400*fac), diameter = 1.7e-1*primR, npoints = 100, start = 0, end = 2, filled = FALSE)
+  crat4 = circleFun(center = c(x+500*fac, y-700*fac), diameter = 3e-1*primR,   npoints = 100, start = 0.2, end = 1.2, filled = FALSE)
   
   porb = porb + geom_polygon(data=moon, aes(x,y), color="grey40", fill="grey40")+geom_path(data=moonT, aes(x, y), color="black", size = surfSize)
   porb = porb + geom_path(data=crat, aes(x, y), color="black",  size = cratSize)
@@ -1146,15 +1241,35 @@ addMoon <- function(porb, x, y, moonR, surfSize, cratSize)
   return(porb)
 }
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
+# Add the Moon to a given dataframe
+#------------------------------------------------------------------------------#
+addPrimary <- function(porb, x, y, primR, surfSize, primColor)
+{
+  moon  = circleFun(center = c(x, y), diameter = primR, npoints = 100, start = 0, end = 2, filled = TRUE)
+  moonT = circleFun(center = c(x, y), diameter = primR, npoints = 100, start = 0, end = 2, filled = FALSE)
+  
+  fac = primR/1737.10
+  fac
+  crat  = circleFun(center = c(x-100*fac, y-300*fac), diameter = 1e-1*primR,   npoints = 100, start = 0, end = 2, filled = FALSE)
+  crat2 = circleFun(center = c(x+400*fac, y+300*fac), diameter = 2.5e-1*primR, npoints = 100, start = 0, end = 2, filled = FALSE)
+  crat3 = circleFun(center = c(x-500*fac, y+400*fac), diameter = 1.7e-1*primR, npoints = 100, start = 0, end = 2, filled = FALSE)
+  crat4 = circleFun(center = c(x+500*fac, y-700*fac), diameter = 3e-1*primR,   npoints = 100, start = 0.2, end = 1.2, filled = FALSE)
+  
+  porb = porb + geom_polygon(data=moon, aes(x,y), color=primColor, fill=primColor)
+  porb = porb + geom_path(data=moonT, aes(x, y), color="black", size = surfSize)
+  return(porb)
+}
+
+#------------------------------------------------------------------------------#
 # Pretty number of ticks
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 number_ticks <- function(n) {function(limits) pretty(limits, n)}
 
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # [DEPRECATED] Plot function for dashed line plots
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 plotdf_line_dashed<- function(ttm,       #dataframe
                               colx,             #x
                               coly,             #y
@@ -1241,4 +1356,34 @@ plotdf_line_dashed<- function(ttm,       #dataframe
   #Return the plot handle
   #--------------------------------------
   return(px)
+}
+
+
+#------------------------------------------------------------------------------#
+# Pretty geom_point
+#------------------------------------------------------------------------------#
+geom_point_pretty <- function(figure, dataf, aes, color=NaN, size = 2)
+{
+  figure = figure + geom_point(data = dataf, aes, color= "black", size = size+2.5)
+  figure = figure + geom_point(data = dataf, aes, color= 'white', size = size+2)
+  
+  if(is.nan(color))
+  {
+    figure = figure + geom_point(data = dataf, aes, size = size)
+  }else
+  {
+    figure = figure + geom_point(data = dataf, aes, color = color, size = size)
+  }
+  
+  return(figure)
+}
+
+#------------------------------------------------------------------------------#
+# Dataframe of a circle at center "center", of radius r, using npoints points.
+#------------------------------------------------------------------------------#
+circleOrbit <- function(center = c(0,0), r = 1, npoints = 100){
+  tt <- seq(0, 2*pi,length.out = npoints)
+  xx <- center[1] + r * cos(tt)
+  yy <- center[2] + r * sin(tt)
+  return(data.frame(x = xx, y = yy))
 }

@@ -8,7 +8,7 @@
 #hard
 if(LIB_POINT_EM == "L2")
 {
-  projection_lim_max = 2e-3; #1e-1
+  projection_lim_max = 5e-3; #1e-1
   projection_lim_mid = 5e-4;
   projection_color_lim = c(0, 1e-2);
 }else
@@ -47,7 +47,7 @@ title3 <- function(s1)
 
 #===============================================================================
 # Functions for filename 
-#===============================================================================
+#===============================================================================z
 filename1 <- function(t0, index_pdf)
 {
   str = paste0(getwd(), "/ProjMap/VIDEO/", "pp_tiles_", 
@@ -89,20 +89,31 @@ filename5 <- function(t0, index_pdf)
   return(str)
 }
 
+filename6 <- function(t0, index_pdf)
+{
+  str = paste0(getwd(), "/ProjMap/VIDEO/", "pp_tiles_", 
+               "from_EM", LIB_POINT_EM, "_to_SEM", LIB_POINT_SEM, 
+               "_s1EM_s3EM_crossings_t0_", toString(1000*t0/CST_SEM_PERIOD_EM), '.pdf')
+  return(str)
+}
+
 #===============================================================================
 # User-defined video type 
 #===============================================================================
-splash = paste0("The different possibilities of video are the following:\n",
+splash1 = paste0("The different possibilities of video are the following:\n",
                 "A. Displaying the projection distance:\n",
-                "1. s1_CMU_EM vs s3_CMU_EM as t0_CMU_EM increases;\n",
-                "2. t0_CMU_EM vs s1_CMU_EM as s3_CMU_EM increases;\n",
-                "3. t0_CMU_EM vs s3_CMU_EM as s1_CMU_EM increases;\n",
+                "  1. s1_CMU_EM vs s3_CMU_EM as t0_CMU_EM increases;\n",
+                "  2. t0_CMU_EM vs s1_CMU_EM as s3_CMU_EM increases;\n",
+                "  3. t0_CMU_EM vs s3_CMU_EM as s1_CMU_EM increases;\n",
                 "B. Displaying the time of flight:\n",
-                "4. s1_CMU_EM vs s3_CMU_EM as t0_CMU_EM increases;\n",
+                "  4. s1_CMU_EM vs s3_CMU_EM as t0_CMU_EM increases;\n",
                 "C. Displaying the crossings:\n",
-                "5. s1_CMU_EM vs s3_CMU_EM as t0_CMU_EM increases;\n",
-                "Enter the corresponding value (1, 2, 3, 4, or 5):")
-video_type = readline(prompt=splash)
+                "  5. s1_CMU_EM vs s3_CMU_EM as t0_CMU_EM increases;\n",
+                "  6. Same, but only the primary family;")
+splash2 = paste0("Enter the corresponding value (1, 2, 3, 4, 5, or 6):")
+
+writeLines(splash1)
+video_type = readline(prompt=splash2)
 
 
 
@@ -207,7 +218,7 @@ if(video_type == 1)
   titlef = title1
   # Corresponding filename function
   filenamef = filename4
-}else if(video_type == 5)
+}else if(video_type == 5 || video_type == 6)
 {
   #=============================================================================
   # s1_CMU_EM vs s3_CMU_EM as t0_CMU_EM increases
@@ -235,7 +246,7 @@ if(video_type == 1)
   #=============================================================================
   # otherwise...
   #=============================================================================
-  stop("unknown video-type. Must be 1, 2 or 3")
+  stop("unknown video-type. Must between 1 and 6")
 }
 
 
@@ -248,8 +259,17 @@ for(zz in unique_vec)
   #=============================================================================
   # Select the data
   #=============================================================================
-  condition = all_vec == zz & proj_map$crossings == 2 & proj_map$collision == 0
-  proj_map_sub = proj_map[which(condition),] 
+  if(video_type == 6)
+  {
+    # Selecting the primary family
+    condition = all_vec == zz & proj_map$crossings == 2 & proj_map$collision == 0
+    proj_map_sub = proj_map[which(condition),] 
+  }else
+  {
+    condition = all_vec == zz
+    proj_map_sub = proj_map[which(condition),] 
+  }
+  
 
   #=============================================================================
   # Plot
@@ -264,13 +284,21 @@ for(zz in unique_vec)
     pp_tiles_eP = plotdf_tile_1(proj_map_sub, xx, yy, xxs, yys, "tof_EM", tof_exp, isLegendOn = TRUE)
     pp_tiles_eP = pp_tiles_eP + scale_colour_gradient2(space="Lab", midpoint= 6, guide = FALSE)
     pp_tiles_eP = pp_tiles_eP + scale_fill_gradient2(expression(TOF~(xT)), space="Lab", midpoint = 6)
-  }else
+  }else 
   {
-    
     #---------------------------------------------------------------------------
     # Colors
     #---------------------------------------------------------------------------
-    vcross  = c("2")#, "2.2", "3", "3.1", "4", "4.2", "5, 6") 
+    if(video_type == 5)
+    {
+      # A selected set of crossings
+      vcross  = c("2", "2.2", "3", "3.1", "4", "4.2", "5, 6") 
+    }else
+    {
+      # Only the primary
+      vcross  = c("2")
+    }
+    
     vcolors = brewer.pal(8,"Dark2")
     vmatchs = c("2" = vcolors[1], "2.2" = vcolors[2], 
                 "3" = vcolors[3], "3.1" = vcolors[4], "4" = vcolors[5],

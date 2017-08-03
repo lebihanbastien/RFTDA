@@ -4,7 +4,7 @@
 # Used for the computation of the plots in the IOP article (2016).
 # BLB 2016
 # Working as of 30/08/2016.
-#--------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 #------------------------------------------------
 # Init
@@ -39,7 +39,7 @@ muR = muR(FWRK);
 gamma = gamma(Li, FWRK);
 c1    =  c1(Li, FWRK);
 L     = Ldist(FWRK)
-Period = ifelse(MODEL=="QBCP", 6.79119387190792, 2*pi)
+Period = ifelse(MODEL=="QBCP", SEMperiod(FWRK), 2*pi)
 
 #------------------------------------------------
 # Type of plot (can be changed at will)

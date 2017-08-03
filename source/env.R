@@ -123,6 +123,14 @@ Tcrtbp <- function(FWRK)
 }
 
 #-------------------------------------------------------------------------------
+# Transition from RATIO*T to DAYS
+#-------------------------------------------------------------------------------
+T2days <- function(RATIO, FWRK)
+{
+  return(RATIO*SEMperiod(FWRK)*Tcrtbp(FWRK)/(2*pi*86400))
+}
+
+#-------------------------------------------------------------------------------
 # Return the value of the SEM period in the FWRK, in normalized units
 #-------------------------------------------------------------------------------
 SEMperiod <- function(FWRK)
@@ -220,8 +228,8 @@ dflibpoint <- function(LIB_POINT, FWRK)
   
   # Physical coordinates
   li$x_PH = CST_DIST_PRIM * li$x_SYS
-  li$y_PH = CST_DIST_PRIM * li$x_SYS
-  li$z_PH = CST_DIST_PRIM * li$x_SYS
+  li$y_PH = CST_DIST_PRIM * li$y_SYS
+  li$z_PH = CST_DIST_PRIM * li$z_SYS
   
   # Physical coordinates centered on the libration point
   li$x_NCPH = CST_GAMMA_LIB * CST_DIST_PRIM * li$x_NC
@@ -260,6 +268,10 @@ dfprimary <- function(NAME, LIB_POINT, FWRK)
     # System coordinates (either SEM or EM)
     if(FWRK == "SEM") dfprim = data.frame(x_SYS = -1 + muR("SEM"), y_SYS = 0.0, z_SYS = 0.0)
     if(FWRK == "EM")  dfprim = data.frame(x_SYS =    + muR("EM"),  y_SYS = 0.0, z_SYS = 0.0)
+    
+    # Natural constants
+    R_NC =  6378.10  #radius in km
+    O_NC = 150e6  #orbit radius in km
   }
   
   # Moon case
@@ -267,23 +279,42 @@ dfprimary <- function(NAME, LIB_POINT, FWRK)
   {
     # System coordinates (EM)
     dfprim = data.frame(x_SYS = -1 + muR("EM"), y_SYS = 0.0, z_SYS = 0.0)
+    
+    # Natural constants
+    R_NC =  1737.10  #radius in km
+    
+    # Orbit radius in km
+    # Mean radius of the orbit of the moon, in NCSEM coordinates: 2.518747349676265e-01
+    O_NC = 2.518747349676265e-01*gamma("L2", "SEM")*Ldist("SEM")
   }
   
-  
+
   # NC coordinates
   dfprim$x_NC = -dfprim$x_SYS/CST_GAMMA_LIB + CST_C1_LIB;
   dfprim$y_NC = -dfprim$y_SYS/CST_GAMMA_LIB;
   dfprim$z_NC = -dfprim$z_SYS/CST_GAMMA_LIB;
+  dfprim$r_NC = R_NC/(CST_DIST_PRIM*CST_GAMMA_LIB)
+  dfprim$o_NC = O_NC/(CST_DIST_PRIM*CST_GAMMA_LIB)
+  
   
   # Physical coordinates
   dfprim$x_PH = CST_DIST_PRIM * dfprim$x_SYS
-  dfprim$y_PH = CST_DIST_PRIM * dfprim$x_SYS
-  dfprim$z_PH = CST_DIST_PRIM * dfprim$x_SYS
+  dfprim$y_PH = CST_DIST_PRIM * dfprim$y_SYS
+  dfprim$z_PH = CST_DIST_PRIM * dfprim$z_SYS
+  dfprim$r_PH = R_NC
+  dfprim$o_PH = O_NC
+  
   
   # Physical coordinates centered on the libration point
   dfprim$x_NCPH = CST_GAMMA_LIB * CST_DIST_PRIM * dfprim$x_NC
   dfprim$y_NCPH = CST_GAMMA_LIB * CST_DIST_PRIM * dfprim$y_NC
   dfprim$z_NCPH = CST_GAMMA_LIB * CST_DIST_PRIM * dfprim$z_NC
+  dfprim$r_NCPH = R_NC
+  dfprim$o_NCPH = O_NC
+  
+  # SYS coordinates
+  dfprim$o_SYS = O_NC/(CST_DIST_PRIM)
+  dfprim$r_SYS = R_NC/(CST_DIST_PRIM)
   
   
   return(dfprim)

@@ -44,16 +44,16 @@ source("source/init.R")
 #------------------------------------------------
 # Select Models & libration point
 #------------------------------------------------
-Li    = "L2"
+Li    = "L1"
 MODEL = "QBCP"
-FWRK  = "SEM"
-FWRK2  = "EM"
+FWRK  = "EM"
+FWRK2  = "SEM"
 
 #Working folder
 currentfolder = paste0(plotfolder(MODEL, FWRK, Li), "orbits/")
 
 #Period of the system
-Period = ifelse(MODEL=="QBCP", 6.79119387190792, 2*pi)
+Period = ifelse(MODEL=="QBCP", SEMperiod(FWRK), 2*pi)
 
 #------------------------------------------------
 #Normalized units (gamma, c1)
@@ -95,14 +95,6 @@ orbit = rbind(native_orbit)#, back_orbit)
 
 
 #------------------------------------------------
-# Post-processing on coordinates and units
-#------------------------------------------------
-# From NC to EM units
-orbit = NCtoSYS(orbit, gamma, c1)
-# From EM to physical units
-orbit = SYStoPH(orbit, L)
-
-#------------------------------------------------
 #Origin
 #------------------------------------------------
 Ldf = data.frame(x = 0, y = 0, z =0)
@@ -111,6 +103,17 @@ Ldf = NCtoSYS(Ldf, gamma, c1)
 # From EM to physical units
 Ldf = SYStoPH(Ldf, L)
 
+#------------------------------------------------
+# Post-processing on coordinates and units
+#------------------------------------------------
+# From NC to EM units
+orbit = NCtoSYS(orbit, gamma, c1)
+# From EM to physical units
+orbit = SYStoPH(orbit, L)
+# Physical coordinates with respect to the geometrical position of the lib point
+orbit$xCPH = orbit$xPH - Ldf$xPH
+orbit$yCPH = orbit$yPH - Ldf$yPH
+orbit$zCPH = orbit$zPH - Ldf$zPH
 
 #------------------------------------------------
 #Select half period time

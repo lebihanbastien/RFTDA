@@ -1,0 +1,13 @@
+#!/bin/bash
+#=====================================================================
+# gif2video
+# Builds a video from a .gif  using ffmpeg
+#
+# BLB 2016
+#
+# Two parameters: 
+#   $1 is the name of the gif (with the extension). Ex: pp_tiles_x0EM_y0EM_eP.gif
+#   $2 is the name of the output (with the extension). Ex: pp_tiles_x0EM_y0EM_eP.mp4
+#=====================================================================
+ffmpeg -f gif -i $1 -crf 0 $2
+

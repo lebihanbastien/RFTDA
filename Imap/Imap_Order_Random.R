@@ -9,7 +9,7 @@ source("source/init.R")
 #------------------------------------------------
 # Select Models & libration point
 #------------------------------------------------
-Li     = "L2"
+Li     = "L1"
 MODEL  = "QBCP"
 FWRK   = "EM"
 Type   = "rand" #rand or NF_rand

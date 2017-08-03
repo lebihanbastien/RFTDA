@@ -1,0 +1,6 @@
+ORBITS_PROJ_POSTPROCESS.R:connec_labels     = unique(proj_map_prec$label.seed)
+ORBITS_PROJ_POSTPROCESS.R:condition         = proj_map_orbit$label.seed %in% connec_labels
+ORBITS_PROJ_POSTPROCESS.R:proj_map_prec_first  = ddply(proj_map_prec_all, .(label.seed), compute_first_point_r0)
+util/SUBROUTINES.R:    ppt = ggplot() +  geom_point(data = proj_map_orbit, aes_string(x = col.x, y = col.y, group= "label.seed"), color = "white", size = 4)
+util/SUBROUTINES.R:    ppt = ppt + geom_path(data = proj_map_prec_all, aes_string(x = col.x, y = col.y, group= "label.seed"), color = "black", size = 0.2)
+util/SUBROUTINES.R:    ppt = ggplot() +  geom_path(data = proj_map_prec_all, aes_string(x = col.x, y = col.y, group= "label.seed"), color = "black", size = 0.2)

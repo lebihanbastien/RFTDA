@@ -64,15 +64,6 @@ for(i in 1:length(t0_CMU_EM_vec))
     #     ppl[[i]] = ppl[[i]] + scale_colour_gradient2("pmin_dist_SEM", space="Lab", midpoint = projection_lim_mid, mid = "white", high = muted("blue"), guide = FALSE)
     #     ppl[[i]] = ppl[[i]] + ggtitle(paste0("t = ", toString(t0_CMU_EM_vec[i]/CST_SEM_PERIOD_EM), "T"))
     
-    #------------------------------------------------
-    # Plot : points in the x0_CM_SEM/y0_CM_SEM space
-    #------------------------------------------------
-    #     ppl[[index]] = plotdf_point(ttm_l[[i]], "xf_CM_SEM", "yf_CM_SEM", "xf_CM_SEM", "yf_CM_SEM","pmin_dist_SEM", "pmin_dist_SEM", 0, pointSize = 3)
-    #     ppl[[index]] = ppl[[index]] + scale_colour_gradient2("pmin_dist_SEM", space="Lab", midpoint = projection_lim_mid, mid = "white", high = muted("blue"), guide = FALSE)
-    #     #Add SEMLi
-    #     ppl[[index]] = ppl[[index]] + geom_point(data = seml2, aes(x= xEM, y= yEM), size = 4) 
-    #     #Title
-    #     ppl[[index]]  = ppl[[index]] + ggtitle(paste0("t = ", toString(t0_CMU_EM_vec[i]/CST_SEM_PERIOD_EM), "T"))
     
     #------------------------------------------------
     #Index
